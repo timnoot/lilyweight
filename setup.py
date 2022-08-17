@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.3'
+VERSION = '0.0.4'
 DESCRIPTION = 'Hypixel SkyBlock Weight Calculator.'
 
 # Setting up
@@ -21,5 +21,6 @@ setup(
         'Operating System :: OS Independent',
         'License :: OSI Approved :: MIT License',
         "Programming Language :: Python :: 3",
-    ]
+    ],
+    package_data={'lilyweight': ['lilyweight/calcs/*']}
 )
