@@ -49,7 +49,10 @@ def get_skill_weight(skill_level_dict: Dict, skill_experience_dict: Dict) -> Tup
     ... }
     >>> get_skill_weight(skill_level_dict, skill_experience_dict)
     """
-    skill_average = sum(skill_level_dict.values()) / len(skill_level_dict)  # Calculate the average skill level
+    try:
+        skill_average = sum(skill_level_dict.values()) / 8  # Calculate the average skill level
+    except ZeroDivisionError:
+        skill_average = 0
 
     n = 12 * ((skill_average / 60) ** 2.44780217148309)
 

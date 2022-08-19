@@ -67,32 +67,35 @@ class LilyWeight:
 
         # Slayers
         slayer_kwargs = {  # Loop through the slayer bosses and get the xp if they key exists else default value
-            boss_type: boss_data.get("xp", 0) for boss_type, boss_data in profile.get("slayer_bosses", {}).items()
-        } if profile.get("slayer_bosses", {}) else {"zombie": 0, "spider": 0, "wolf": 0, "enderman": 0, "blaze": 0}
+            "zombie": 0, "spider": 0, "wolf": 0, "enderman": 0, "blaze": 0
+        }
+        if profile and profile.get("slayer_bosses"):
+            for boss_type, boss_data in profile.get("slayer_bosses", {}).items():
+                slayer_kwargs[boss_type] = boss_data.get("xp", 0)
 
         # Catacombs Completions
         # Get the catacombs weight of the player
         try:
             cata_completions = profile["dungeons"]["dungeon_types"]["catacombs"]["tier_completions"]
             # Try to get the catacombs completions
-        except KeyError:
+        except:
             # If the keys are not found set to default value
             cata_completions = {}
         try:
             m_cata_compl = profile["dungeons"]["dungeon_types"]["master_catacombs"]["tier_completions"]
-        except KeyError:
+        except:
             m_cata_compl = {}
 
         # Catacombs XP
         try:
             cata_xp = profile["dungeons"]["dungeon_types"]["catacombs"]["experience"]
-        except KeyError:
+        except:
             cata_xp = 0
 
         # Skills
         skill_experience_dict = {}
         skill_level_dict = {}
-        if profile.get("experience_skill_mining") is None:
+        if profile and profile.get("experience_skill_mining") is None:
             # Skill api is off
             player = await get_player(uuid, self.api_key, self.session)  # Get the player data from the hypixel api
 
@@ -102,10 +105,11 @@ class LilyWeight:
                 skill_level_dict[skill_type] = level  # Add the skill level to the skill level dict
         else:
             # Loop through all the skills lily weight uses
-            for skill_type in used_skills.keys():
-                experience = profile.get(f"experience_skill_{skill_type}", 0)  # Get the experience of the skill
-                skill_experience_dict[skill_type] = experience  # Add the experience to the experience skill dict
-                skill_level_dict[skill_type] = get_level_from_XP(experience)  # Add the skill level to the counter
+            if profile:
+                for skill_type in used_skills.keys():
+                    experience = profile.get(f"experience_skill_{skill_type}", 0)  # Get the experience of the skill
+                    skill_experience_dict[skill_type] = experience  # Add the experience to the experience skill dict
+                    skill_level_dict[skill_type] = get_level_from_XP(experience)  # Add the skill level to the counter
         # print((skill_level_dict, skill_experience_dict, cata_completions, m_cata_compl, cata_xp, slayer_kwargs))
         return self.get_weight_raw(
             skill_level_dict, skill_experience_dict, cata_completions, m_cata_compl, cata_xp, **slayer_kwargs
