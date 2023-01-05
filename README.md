@@ -88,7 +88,7 @@ Example output of one of the functions, in JSON:
 ```json
 {
     "total": 14439.880600696824,
-    "skill": {
+    "skill_weight": {
         "base": 10346.795817290036,
         "overflow": 173.30267908613297
     },
